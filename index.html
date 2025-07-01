@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Game Dev Page</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #0f0f0f;
+      color: #f0f0f0;
+      margin: 0;
+      padding: 2rem;
+      line-height: 1.6;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    a {
+      color: #00ffff;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .search-bar {
+      flex-grow: 1;
+      max-width: 300px;
+      margin-right: 1.5rem;
+    }
+    .search-bar input {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 4px;
+      border: none;
+      font-size: 1rem;
+      color: #0f0f0f;
+    }
+    .left-info {
+      flex: 1;
+      min-width: 200px;
+      margin-left: 1.5rem;
+    }
+    .right-info {
+      flex: 1;
+      min-width: 200px;
+      text-align: right;
+    }
+    .right-info p, .right-info button {
+      margin: 0.25rem 0;
+    }
+    .right-info button {
+      background-color: #00ffff;
+      color: #0f0f0f;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .right-info button:hover {
+      background-color: #00bbbb;
+    }
+    .card, .updates-panel {
+      background: #1a1a1a;
+      padding: 1rem;
+      margin-top: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 5px #222;
+    }
+    h1, h2 {
+      margin: 0 0 0.5rem 0;
+    }
+    .updates-panel h2 {
+      margin-bottom: 1rem;
+    }
+    .updates-list {
+      max-height: 200px;
+      overflow-y: auto;
+      padding-right: 0.5rem;
+    }
+    .update-item {
+      border-bottom: 1px solid #333;
+      padding: 0.5rem 0;
+    }
+    .update-item:last-child {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="search-bar">
+      <input id="searchInput" type="text" placeholder="Search..." />
+    </div>
+    <div class="left-info">
+      <p><strong>Working on a 2D farming game</strong></p>
+      <p>Explore farming, fishing, mining, crop growing, and day/night cycles inspired by Stardew Valley mechanics.</p>
+    </div>
+    <div class="right-info">
+      <p><strong>What's New</strong></p>
+      <ul style="list-style:none; padding-left:0; margin-top:0;">
+        <li>New watering system implemented</li>
+        <li>Added fishing mini-game</li>
+      </ul>
+      <p><a href="https://discord.gg/e5zfXFfqGB" target="_blank" rel="noopener noreferrer">Discord Server</a></p>
+      <button id="donateBtn">Support us</button>
+    </div>
+  </header>
+
+  <div class="card">
+    <h2>🌾 Stardew-Inspired Game</h2>
+    <p>Currently working on a 2D farming game using GDevelop.</p>
+    <p><a href="#">[ Download Latest Build ]</a></p>
+  </div>
+
+  <div class="updates-panel" id="updatesPanel">
+    <h2>🔄 Updates & Options</h2>
+    <div class="updates-list" id="updatesList">
+      <div class="update-item">
+        <strong>July 6:</strong> We're gonna officially start the project.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const updatesPanel = document.getElementById('updatesPanel');
+    const updatesList = document.getElementById('updatesList');
+    const donateBtn = document.getElementById('donateBtn');
+
+    donateBtn.addEventListener('click', () => {
+      // Redirect to donation page - blank for now
+      window.location.href = '#'; // Replace '#' with your donation page URL later
+    });
+
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const query = searchInput.value.toLowerCase().trim();
+        // Check if query contains any of the keywords: game, updates, game mechanics
+        if (query.includes('game') || query.includes('updates') || query.includes('game mechanics')) {
+          updatesPanel.innerHTML = `
+            <h2>🌻 Sunflower Valley</h2>
+            <p>Sunflower Valley is going to be the best project of my life. I'm going to create a farming game which has farming, fishing, selling, and many more. Stay with us and get up to date by joining our <a href="https://discord.gg/e5zfXFfqGB" target="_blank" rel="noopener noreferrer">Discord server</a>.</p>
+            <p>Thanks to all of you</p>
+            <h3>Game update</h3>
+            <p>Work will start from July 6.</p>
+            <p>We will keep you up to date.</p>
+          `;
+        } else {
+          // If search doesn't match, reset to original updates
+          updatesPanel.innerHTML = `
+            <h2>🔄 Updates & Options</h2>
+            <div class="updates-list" id="updatesList">
+              <div class="update-item">
+                <strong>July 6:</strong> We're gonna officially start the project.
+              </div>
+            </div>
+          `;
+        }
+        searchInput.value = ''; // Clear search input
+      }
+    });
+  </script>
+</body>
+</html>
