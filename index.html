@@ -69,7 +69,7 @@
     .right-info button:hover {
       background-color: #00bbbb;
     }
-    .card, .updates-panel {
+    .card, .updates-panel, #sunflower-valley {
       background: #1a1a1a;
       padding: 1rem;
       margin-top: 2rem;
@@ -93,6 +93,24 @@
     }
     .update-item:last-child {
       border-bottom: none;
+    }
+    /* Video upload styles */
+    #video-upload-section {
+      margin-top: 1rem;
+    }
+    #videoUploader {
+      background-color: #222;
+      color: #eee;
+      padding: 0.4rem;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+    }
+    #videoPreview {
+      margin-top: 1rem;
+      border-radius: 8px;
+      max-width: 100%;
+      display: none;
     }
   </style>
 </head>
@@ -128,6 +146,22 @@
       <div class="update-item">
         <strong>July 6:</strong> We're gonna officially start the project.
       </div>
+    </div>
+  </div>
+
+  <!-- New Sunflower Valley Panel with video upload -->
+  <div id="sunflower-valley">
+    <h2>🌻 Sunflower Valley</h2>
+    <p>Sunflower Valley is going to be the best project of my life. I'm going to create a farming game which has farming, fishing, selling, and many more. Stay with us and get up to date by joining our <a href="https://discord.gg/e5zfXFfqGB" target="_blank" rel="noopener noreferrer">Discord server</a>.</p>
+    <p>Thanks to all of you</p>
+    <h3>Game update</h3>
+    <p>Work will start from July 6.</p>
+    <p>We will keep you up to date.</p>
+
+    <div id="video-upload-section">
+      <label for="videoUploader">Upload a video (owner only):</label><br />
+      <input type="file" id="videoUploader" accept="video/*" />
+      <video id="videoPreview" width="320" height="240" controls></video>
     </div>
   </div>
 
@@ -167,6 +201,22 @@
           `;
         }
         searchInput.value = ''; // Clear search input
+      }
+    });
+
+    // Video upload preview logic
+    const videoUploader = document.getElementById('videoUploader');
+    const videoPreview = document.getElementById('videoPreview');
+
+    videoUploader.addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const url = URL.createObjectURL(file);
+        videoPreview.src = url;
+        videoPreview.style.display = 'block';
+      } else {
+        videoPreview.src = '';
+        videoPreview.style.display = 'none';
       }
     });
   </script>
