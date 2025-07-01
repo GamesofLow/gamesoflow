@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>My Game Dev Page</title>
   <style>
-    /* Your existing styles... */
     body {
       font-family: sans-serif;
       background-color: #0f0f0f;
@@ -30,6 +29,7 @@
       margin-bottom: 2rem;
       flex-wrap: wrap;
       gap: 1rem;
+      position: relative;
     }
     .search-bar {
       flex-grow: 1;
@@ -55,10 +55,10 @@
       text-align: right;
       position: relative;
     }
-    .right-info p, .right-info button {
+    .right-info p {
       margin: 0.25rem 0;
     }
-    .right-info button {
+    button {
       background-color: #00ffff;
       color: #0f0f0f;
       border: none;
@@ -67,8 +67,9 @@
       font-weight: bold;
       cursor: pointer;
       transition: background-color 0.3s ease;
+      margin-top: 0.5rem;
     }
-    .right-info button:hover {
+    button:hover {
       background-color: #00bbbb;
     }
     .card, .updates-panel {
@@ -80,9 +81,6 @@
     }
     h1, h2 {
       margin: 0 0 0.5rem 0;
-    }
-    .updates-panel h2 {
-      margin-bottom: 1rem;
     }
     .updates-list {
       max-height: 200px;
@@ -97,86 +95,60 @@
       border-bottom: none;
     }
 
-    /* --- Login/Signup Panel --- */
-    #authPanel {
+    /* Auth and Profile panels */
+    #authPanel, #profilePanel {
       position: absolute;
-      top: 2rem;
+      top: 2.5rem;
       right: 0;
       background: #222;
       padding: 1rem;
       border-radius: 8px;
-      width: 260px;
-      box-shadow: 0 0 10px #00ffff;
-      z-index: 100;
+      width: 280px;
+      box-shadow: 0 0 10px #000;
       display: none;
-      color: #eee;
+      z-index: 10;
     }
-    #authPanel input[type="email"],
-    #authPanel input[type="password"] {
+    #authPanel input {
       width: 100%;
       padding: 0.5rem;
-      margin-bottom: 0.75rem;
+      margin: 0.5rem 0;
       border-radius: 4px;
       border: none;
       font-size: 1rem;
     }
-    #authPanel button {
-      width: 100%;
-      padding: 0.5rem;
-      background: #00ffff;
-      border: none;
-      color: #0f0f0f;
-      font-weight: bold;
-      cursor: pointer;
-      border-radius: 6px;
+    #authMessage {
+      color: #ff5555;
       margin-bottom: 0.5rem;
-      transition: background 0.3s ease;
+      min-height: 1.2em;
     }
-    #authPanel button:hover {
-      background: #00bbbb;
-    }
-
-    /* Profile Panel */
-    #profilePanel {
-      position: absolute;
-      top: 2rem;
-      right: 0;
-      background: #222;
-      padding: 1rem;
-      border-radius: 8px;
-      width: 260px;
-      box-shadow: 0 0 10px #00ffff;
-      z-index: 100;
-      display: none;
-      color: #eee;
-      text-align: center;
-    }
-    #avatar {
-      margin: 0 auto 1rem;
+    #profilePanel canvas {
+      display: block;
+      margin: 0 auto 1rem auto;
       width: 80px;
       height: 80px;
       image-rendering: pixelated;
       border-radius: 12px;
-      display: block;
       background-color: #00ffff;
     }
-    #profilePanel button {
-      margin-top: 1rem;
-      padding: 0.5rem 1rem;
-      background: #00ffff;
+    #profilePanel p {
+      text-align: center;
+      margin: 0.5rem 0 1rem 0;
+      word-break: break-all;
+    }
+    #switchAuthMode {
+      background: none;
       border: none;
-      border-radius: 6px;
-      color: #0f0f0f;
-      font-weight: bold;
+      color: #00ffff;
       cursor: pointer;
-      transition: background 0.3s ease;
+      text-decoration: underline;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
     }
-    #profilePanel button:hover {
-      background: #00bbbb;
-    }
+
   </style>
 </head>
 <body>
+
   <header>
     <div class="search-bar">
       <input id="searchInput" type="text" placeholder="Search..." />
@@ -193,23 +165,24 @@
       </ul>
       <p><a href="https://discord.gg/e5zfXFfqGB" target="_blank" rel="noopener noreferrer">Discord Server</a></p>
       <button id="authToggleBtn">Login / Signup</button>
-    </div>
+      <button id="donateBtn">Support us</button>
 
-    <!-- Auth Panel -->
-    <div id="authPanel">
-      <h3 id="authTitle">Login</h3>
-      <input type="email" id="emailInput" placeholder="Email" required />
-      <input type="password" id="passwordInput" placeholder="Password" required />
-      <button id="authSubmitBtn">Login</button>
-      <p style="font-size: 0.9rem; cursor: pointer; color: #00bbbb;" id="switchAuthMode">Don't have an account? Signup</p>
-      <p id="authMessage" style="color: #ff6666;"></p>
-    </div>
+      <!-- Auth Panel -->
+      <div id="authPanel">
+        <h3 id="authTitle">Login</h3>
+        <div id="authMessage"></div>
+        <input type="email" id="emailInput" placeholder="Email" autocomplete="username" />
+        <input type="password" id="passwordInput" placeholder="Password" autocomplete="current-password" />
+        <button id="authSubmitBtn">Login</button>
+        <button id="switchAuthMode">Don't have an account? Signup</button>
+      </div>
 
-    <!-- Profile Panel -->
-    <div id="profilePanel">
-      <canvas id="avatar" width="8" height="8"></canvas>
-      <p id="profileEmail"></p>
-      <button id="logoutBtn">Logout</button>
+      <!-- Profile Panel -->
+      <div id="profilePanel">
+        <canvas id="avatar" width="8" height="8"></canvas>
+        <p id="profileEmail"></p>
+        <button id="logoutBtn">Logout</button>
+      </div>
     </div>
   </header>
 
@@ -229,59 +202,50 @@
   </div>
 
 <script>
-  // Auth UI elements
+  // Elements
   const authToggleBtn = document.getElementById('authToggleBtn');
   const authPanel = document.getElementById('authPanel');
+  const profilePanel = document.getElementById('profilePanel');
   const authTitle = document.getElementById('authTitle');
+  const authMessage = document.getElementById('authMessage');
   const emailInput = document.getElementById('emailInput');
   const passwordInput = document.getElementById('passwordInput');
   const authSubmitBtn = document.getElementById('authSubmitBtn');
   const switchAuthMode = document.getElementById('switchAuthMode');
-  const authMessage = document.getElementById('authMessage');
-  const profilePanel = document.getElementById('profilePanel');
-  const profileEmail = document.getElementById('profileEmail');
   const logoutBtn = document.getElementById('logoutBtn');
-  const avatarCanvas = document.getElementById('avatar');
-  const avatarCtx = avatarCanvas.getContext('2d');
+  const profileEmail = document.getElementById('profileEmail');
+  const avatarCanvas = document.getElementById('avatar').getContext('2d');
 
   let isLoginMode = true;
 
-  // Utility: Save user data to localStorage
-  function saveUser(email, password) {
-    let users = JSON.parse(localStorage.getItem('users')) || {};
-    users[email] = { password };
+  // User storage helpers
+  function getUsers() {
+    return JSON.parse(localStorage.getItem('users') || '{}');
+  }
+  function saveUsers(users) {
     localStorage.setItem('users', JSON.stringify(users));
   }
-
-  // Utility: Get user data
   function getUser(email) {
-    let users = JSON.parse(localStorage.getItem('users')) || {};
+    const users = getUsers();
     return users[email];
   }
-
-  // Generate a simple pixel avatar from email string
-  function generateAvatar(email) {
-    const size = 8;
-    const ctx = avatarCtx;
-    ctx.clearRect(0, 0, size, size);
-    const hash = Array.from(email).reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    for (let y = 0; y < size; y++) {
-      for (let x = 0; x < size; x++) {
-        const pixelValue = (hash + x * y) % 2 === 0 ? '#00ffff' : '#004444';
-        ctx.fillStyle = pixelValue;
-        ctx.fillRect(x, y, 1, 1);
-      }
-    }
+  function saveUser(email, password) {
+    const users = getUsers();
+    users[email] = { password };
+    saveUsers(users);
   }
 
+  // Show profile panel with avatar
   function showProfile(email) {
-    profileEmail.textContent = email;
-    generateAvatar(email);
-    profilePanel.style.display = 'block';
     authPanel.style.display = 'none';
+    profilePanel.style.display = 'block';
     authToggleBtn.textContent = 'Profile';
+
+    profileEmail.textContent = email;
+    drawAvatar(email);
   }
 
+  // Hide profile panel, show auth toggle button
   function hideProfile() {
     profilePanel.style.display = 'none';
     authToggleBtn.textContent = 'Login / Signup';
@@ -296,46 +260,46 @@
       authMessage.textContent = '';
       emailInput.value = '';
       passwordInput.value = '';
+      emailInput.focus();
     }
   });
 
-  // Switch between Login and Signup
+  // Switch between login/signup
   switchAuthMode.addEventListener('click', () => {
     isLoginMode = !isLoginMode;
     authTitle.textContent = isLoginMode ? 'Login' : 'Signup';
     authSubmitBtn.textContent = isLoginMode ? 'Login' : 'Signup';
-    switchAuthMode.textContent = isLoginMode ? "Don't have an account? Signup" : "Already have an account? Login";
+    switchAuthMode.textContent = isLoginMode ? "Don't have an account? Signup" : 'Already have an account? Login';
     authMessage.textContent = '';
-    emailInput.value = '';
-    passwordInput.value = '';
   });
 
-  // Submit auth form
+  // Handle login/signup submit
   authSubmitBtn.addEventListener('click', () => {
-    const email = emailInput.value.trim();
+    const email = emailInput.value.trim().toLowerCase();
     const password = passwordInput.value.trim();
     if (!email || !password) {
       authMessage.textContent = 'Please fill out all fields.';
       return;
     }
+
+    const users = getUsers();
+
     if (isLoginMode) {
-      const user = getUser(email);
-      if (!user) {
-        authMessage.textContent = 'User not found. Please signup.';
+      // Login
+      if (!users[email]) {
+        authMessage.textContent = 'User not found.';
         return;
       }
-      if (user.password !== password) {
+      if (users[email].password !== password) {
         authMessage.textContent = 'Incorrect password.';
         return;
       }
-      // Login success
       localStorage.setItem('loggedInUser', email);
       showProfile(email);
     } else {
-      // Signup flow
-      const user = getUser(email);
-      if (user) {
-        authMessage.textContent = 'User already exists. Please login.';
+      // Signup
+      if (users[email]) {
+        authMessage.textContent = 'User already exists.';
         return;
       }
       saveUser(email, password);
@@ -344,13 +308,47 @@
     }
   });
 
-  // Logout
+  // Logout button
   logoutBtn.addEventListener('click', () => {
     localStorage.removeItem('loggedInUser');
     hideProfile();
+    authPanel.style.display = 'none';
   });
 
-  // On page load, check if logged in
+  // Draw a simple pixel avatar based on email
+  function drawAvatar(email) {
+    // Clear
+    avatarCanvas.clearRect(0, 0, 8, 8);
+
+    // Simple deterministic hash from email
+    function hash(str) {
+      let h = 0;
+      for (let i = 0; i < str.length; i++) {
+        h = Math.imul(31, h) + str.charCodeAt(i) | 0;
+      }
+      return h;
+    }
+
+    const seed = hash(email);
+    const color = `hsl(${(seed % 360 + 360) % 360}, 70%, 60%)`;
+
+    // Fill pattern - symmetrical 8x8 pixel avatar
+    avatarCanvas.fillStyle = '#0f0f0f';
+    avatarCanvas.fillRect(0, 0, 8, 8);
+
+    avatarCanvas.fillStyle = color;
+    for(let y=0; y<8; y++) {
+      for(let x=0; x<4; x++) {
+        const bit = ((seed >> (y*4 + x)) & 1);
+        if (bit) {
+          avatarCanvas.fillRect(x, y, 1, 1);
+          avatarCanvas.fillRect(7 - x, y, 1, 1);
+        }
+      }
+    }
+  }
+
+  // On load, check if logged in
   window.addEventListener('load', () => {
     const loggedInUser = localStorage.getItem('loggedInUser');
     if (loggedInUser) {
@@ -358,17 +356,12 @@
     }
   });
 
-  // Your existing search and donate code...
-
+  // Search bar functionality
   const searchInput = document.getElementById('searchInput');
   const updatesPanel = document.getElementById('updatesPanel');
-  const donateBtn = document.getElementById('donateBtn');
+  const updatesList = document.getElementById('updatesList');
 
-  donateBtn?.addEventListener('click', () => {
-    window.location.href = '#'; // donation link here
-  });
-
-  searchInput?.addEventListener('keydown', (e) => {
+  searchInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       const query = searchInput.value.toLowerCase().trim();
       if (query.includes('game') || query.includes('updates') || query.includes('game mechanics')) {
@@ -393,6 +386,13 @@
       searchInput.value = '';
     }
   });
+
+  // Donate button action
+  const donateBtn = document.getElementById('donateBtn');
+  donateBtn.addEventListener('click', () => {
+    alert('Donation feature coming soon!');
+  });
+
 </script>
 
 </body>
