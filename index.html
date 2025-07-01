@@ -144,7 +144,6 @@
       font-size: 0.9rem;
       margin-top: 0.5rem;
     }
-
   </style>
 </head>
 <body>
@@ -264,28 +263,37 @@
     }
   });
 
-  // Switch between login/signup
+  // Switch login/signup mode
   switchAuthMode.addEventListener('click', () => {
     isLoginMode = !isLoginMode;
     authTitle.textContent = isLoginMode ? 'Login' : 'Signup';
     authSubmitBtn.textContent = isLoginMode ? 'Login' : 'Signup';
     switchAuthMode.textContent = isLoginMode ? "Don't have an account? Signup" : 'Already have an account? Login';
     authMessage.textContent = '';
+    emailInput.value = '';
+    passwordInput.value = '';
+    emailInput.focus();
   });
 
-  // Handle login/signup submit
+  // Handle auth submit
   authSubmitBtn.addEventListener('click', () => {
     const email = emailInput.value.trim().toLowerCase();
     const password = passwordInput.value.trim();
+
     if (!email || !password) {
       authMessage.textContent = 'Please fill out all fields.';
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      authMessage.textContent = 'Please enter a valid email.';
       return;
     }
 
     const users = getUsers();
 
     if (isLoginMode) {
-      // Login
+      // Login flow
       if (!users[email]) {
         authMessage.textContent = 'User not found.';
         return;
@@ -297,7 +305,7 @@
       localStorage.setItem('loggedInUser', email);
       showProfile(email);
     } else {
-      // Signup
+      // Signup flow
       if (users[email]) {
         authMessage.textContent = 'User already exists.';
         return;
@@ -308,19 +316,17 @@
     }
   });
 
-  // Logout button
+  // Logout
   logoutBtn.addEventListener('click', () => {
     localStorage.removeItem('loggedInUser');
     hideProfile();
-    authPanel.style.display = 'none';
   });
 
-  // Draw a simple pixel avatar based on email
+  // Draw pixel avatar
   function drawAvatar(email) {
-    // Clear
     avatarCanvas.clearRect(0, 0, 8, 8);
 
-    // Simple deterministic hash from email
+    // Simple hash function
     function hash(str) {
       let h = 0;
       for (let i = 0; i < str.length; i++) {
@@ -332,14 +338,13 @@
     const seed = hash(email);
     const color = `hsl(${(seed % 360 + 360) % 360}, 70%, 60%)`;
 
-    // Fill pattern - symmetrical 8x8 pixel avatar
     avatarCanvas.fillStyle = '#0f0f0f';
     avatarCanvas.fillRect(0, 0, 8, 8);
 
     avatarCanvas.fillStyle = color;
-    for(let y=0; y<8; y++) {
-      for(let x=0; x<4; x++) {
-        const bit = ((seed >> (y*4 + x)) & 1);
+    for(let y = 0; y < 8; y++) {
+      for(let x = 0; x < 4; x++) {
+        const bit = ((seed >> (y * 4 + x)) & 1);
         if (bit) {
           avatarCanvas.fillRect(x, y, 1, 1);
           avatarCanvas.fillRect(7 - x, y, 1, 1);
@@ -348,7 +353,13 @@
     }
   }
 
-  // On load, check if logged in
+  // Email validation simple
+  function validateEmail(email) {
+    const re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  }
+
+  // On load, check logged in user
   window.addEventListener('load', () => {
     const loggedInUser = localStorage.getItem('loggedInUser');
     if (loggedInUser) {
@@ -359,9 +370,8 @@
   // Search bar functionality
   const searchInput = document.getElementById('searchInput');
   const updatesPanel = document.getElementById('updatesPanel');
-  const updatesList = document.getElementById('updatesList');
 
-  searchInput.addEventListener('keydown', (e) => {
+  searchInput.addEventListener('keydown', e => {
     if (e.key === 'Enter') {
       const query = searchInput.value.toLowerCase().trim();
       if (query.includes('game') || query.includes('updates') || query.includes('game mechanics')) {
